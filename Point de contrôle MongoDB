@@ -1,0 +1,48 @@
+// Sélection de la base de données "contact"
+use contact;
+
+// Création de la collection (facultative, car insertMany la crée automatiquement)
+db.createCollection("contactlist");
+
+// Insertion des documents
+db.contactlist.insertMany([
+  { nom: "Ben", prenom: "Moris", email: "ben@gmail.com", age: 26 },
+  { nom: "Kefi", prenom: "Seif", email: "kefi@gmail.com", age: 15 },
+  { nom: "Emilie", prenom: "brouge", email: "emilie.b@gmail.com", age: 40 },
+  { nom: "Alex", prenom: "marron", age: 4 },
+  { nom: "Denzel", prenom: "Washington", age: 3 }
+]);
+
+// Afficher toute la liste des contacts
+print("\n--- Tous les contacts ---");
+db.contactlist.find().pretty();
+
+// Remplacer cet ID par un ID réel si nécessaire (exemple fictif)
+print("\n--- Une personne par ID (à modifier avec un vrai ID) ---");
+// db.contactlist.findOne({ _id: ObjectId("64a8a16f6f8b9e001e5a1c9b") });
+
+// Afficher les contacts avec âge > 18
+print("\n--- Contacts avec âge > 18 ---");
+db.contactlist.find({ age: { $gt: 18 } }).pretty();
+
+// Afficher les contacts avec âge > 18 et nom contenant "ah"
+print("\n--- Contacts avec âge > 18 et nom contenant 'ah' ---");
+db.contactlist.find({
+  age: { $gt: 18 },
+  nom: { $regex: "ah", $options: "i" }
+}).pretty();
+
+// Mise à jour : changer prénom de "Kefi Seif" en "Kefi Anis"
+print("\n--- Mise à jour du prénom de Kefi ---");
+db.contactlist.updateOne(
+  { nom: "Kefi", prenom: "Seif" },
+  { $set: { prenom: "Anis" } }
+);
+
+// Suppression : contacts ayant un âge < 5
+print("\n--- Suppression des contacts avec âge < 5 ---");
+db.contactlist.deleteMany({ age: { $lt: 5 } });
+
+// Afficher la liste finale des contacts
+print("\n--- Liste finale des contacts ---");
+db.contactlist.find().pretty();
