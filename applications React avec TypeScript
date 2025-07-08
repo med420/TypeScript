@@ -1,0 +1,38 @@
+import React, { Component } from 'react';
+
+// Composant fonctionnel : Greeting
+const Greeting = ({ name }) => {
+  return <div>Bonjour, {name} !</div>;
+};
+
+// Composant de classe : Counter
+class Counter extends Component {
+  state = {
+    count: 0,
+  };
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return (
+      <div>
+        <p>Count : {this.state.count}</p>
+        <button onClick={this.increment}>Increment</button>
+      </div>
+    );
+  }
+}
+
+// Composant principal App
+function App() {
+  return (
+    <div style={{ padding: '20px' }}>
+      <Greeting name="Alice" />
+      <Counter />
+    </div>
+  );
+}
+
+export default App;
