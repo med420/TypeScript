@@ -1,0 +1,57 @@
+import React, { useState } from "react";
+import AjouterTache from "./AjouterTache";
+import ListeTaches from "./ListeTaches";
+import Filtre from "./Filtre";
+
+export type TacheType = {
+  id: number;
+  description: string;
+  isDone: boolean;
+};
+
+type FiltreType = "toutes" | "faites" | "non-faites";
+
+export default function App() {
+  const [taches, setTaches] = useState<TacheType[]>([]);
+  const [filtre, setFiltre] = useState<FiltreType>("toutes");
+
+  const ajouterTache = (description: string) => {
+    const nouvelleTache = {
+      id: Date.now(),
+      description,
+      isDone: false,
+    };
+    setTaches([...taches, nouvelleTache]);
+  };
+
+  const modifierTache = (id: number, description: string) => {
+    setTaches(taches.map(t =>
+      t.id === id ? { ...t, description } : t
+    ));
+  };
+
+  const toggleEtatTache = (id: number) => {
+    setTaches(taches.map(t =>
+      t.id === id ? { ...t, isDone: !t.isDone } : t
+    ));
+  };
+
+  const tachesFiltrees = taches.filter(t => {
+    if (filtre === "faites") return t.isDone;
+    if (filtre === "non-faites") return !t.isDone;
+    return true;
+  });
+
+  return (
+    <div className="p-4 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Gestionnaire de tâches</h1>
+      <AjouterTache ajouterTache={ajouterTache} />
+      <Filtre filtre={filtre} setFiltre={setFiltre} />
+      <ListeTaches
+        taches={tachesFiltrees}
+        modifierTache={modifierTache}
+        toggleEtatTache={toggleEtatTache}
+      />
+    </div>
+  );
+}
